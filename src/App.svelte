@@ -1,31 +1,40 @@
 <script lang="ts">
-  import Chunks from './lib/Chunks.svelte';
-  import Individual from './lib/Individual.svelte';
+  import { setData } from "./data";
+
+  import MainView from "./lib/MainView.svelte";
+  import test_data from "./test_data.json";
 
   const hash = window.location.hash.substring(1);
-  let tabs = [
-    {name: "Individual Results", comp: Individual},
-    {name: "Chunks", comp: Chunks}
-  ]
-  let activeTab = tabs[0].comp;
+  async function loadData() {
+    setData(test_data);
+    return;
+    if (hash.length == 0) {
+      throw new Error("profile ID cannot be empty");
+    }
+    const data = await fetch(`https://o.tas.sh/api/get/${hash}`);
+    setData(data.json());
+  }
+
+  let promise = loadData();
 </script>
 
 <main>
-  <nav class="navbar">
-    {#each tabs as { name, comp }}
-      <button on:click={e => activeTab = comp} class={activeTab === comp ? "active" : ""}>{name}</button>
-    {/each}
-  </nav>
-
-  <svelte:component this={activeTab} />
+  {#await promise}
+    <h1 class="status">Loading {hash}...</h1>
+  {:then}
+    <MainView />
+  {:catch error}
+    <h1 class="status err">{error}</h1>
+  {/await}
 </main>
 
 <style>
-  .active {
-    text-shadow: -0.03ex 0 currentColor, 0.06ex 0 currentColor;
+  .status {
+    width: 100%;
+    opacity: 0.6;
+    text-align: center;
   }
-  .navbar {
-    width: 100vw;
-    border-bottom: 1px gray;
+  .err {
+    color: red;
   }
 </style>
