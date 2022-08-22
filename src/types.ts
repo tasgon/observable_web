@@ -1,22 +1,22 @@
 export interface Profile {
-  entities: { [s: string]: EntitySample[] };
-  blocks: { [s: string]: BlockSample[] };
-  chunks: { [s: string]: ChunkSample[] };
+  entities: { [s: string]: EntityEntry[] };
+  blocks: { [s: string]: BlockEntry[] };
+  chunks: { [s: string]: ChunkEntry[] };
   ticks: number;
 }
 
-export interface Sample {
+export interface Entry {
   type: string;
   rate: number;
   ticks: number;
   traces?: any;
 }
 
-export interface EntitySample extends Sample {
+export interface EntityEntry extends Entry {
   obj: number;
 }
 
-export interface BlockSample extends Sample {
+export interface BlockEntry extends Entry {
   obj: {
     x: number;
     y: number;
@@ -24,7 +24,7 @@ export interface BlockSample extends Sample {
   };
 }
 
-export interface ChunkSample {
+export interface ChunkEntry {
   first: {
     x: number;
     z: number;

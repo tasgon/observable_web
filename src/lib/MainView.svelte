@@ -1,14 +1,14 @@
 <script lang="ts">
-import Aggregate from './Aggregate.svelte';
+  import Aggregate from "./Aggregate.svelte";
 
-  import Chunks from './Chunks.svelte';
-  import Individual from './Individual.svelte';
+  import Chunks from "./Chunks.svelte";
+  import Individual from "./Individual.svelte";
 
   const hash = window.location.hash.substring(1);
   let tabs = [
-    {name: "Individual Results", comp: Individual},
-    {name: "Chunks", comp: Chunks},
-    {name: "Aggregate Results", comp: Aggregate}
+    { name: "Individual Results", comp: Individual },
+    { name: "Chunks", comp: Chunks },
+    { name: "Aggregate Results", comp: Aggregate },
   ];
 
   let activeTab = tabs[0].comp;
@@ -17,7 +17,10 @@ import Aggregate from './Aggregate.svelte';
 <main>
   <nav class="navbar">
     {#each tabs as { name, comp }}
-      <button on:click={e => activeTab = comp} class={activeTab === comp ? "active" : ""}>{name}</button>
+      <button
+        on:click={(e) => (activeTab = comp)}
+        class={activeTab === comp ? "active" : ""}>{name}</button
+      >
     {/each}
   </nav>
 
@@ -35,5 +38,6 @@ import Aggregate from './Aggregate.svelte';
   .navbar {
     width: 100vw;
     border-bottom: 1px gray;
+    margin-bottom: 1em;
   }
 </style>
