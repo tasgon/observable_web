@@ -26,7 +26,6 @@ a:hover {
 
 body {
   margin: 0;
-  padding-top: 0.5em;
 }
 
 h1 {
@@ -39,7 +38,7 @@ h1 {
 }
 
 #app {
-  margin: 0 1em;
+  margin: 0 0em;
 }
 
 button {

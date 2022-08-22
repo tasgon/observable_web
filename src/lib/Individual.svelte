@@ -9,7 +9,10 @@
     [
       ...Object.entries(getData().blocks),
       ...Object.entries(getData().entities),
-    ].map(([name, entries]) => [name, (entries as Entry[]).sort((a, b) => b.rate - a.rate)])
+    ].map(([name, entries]) => [
+      name,
+      (entries as Entry[]).sort((a, b) => b.rate - a.rate),
+    ])
   );
   let dim_map = Array.from(data).map(([dim, entries]) => {
     return {
@@ -18,21 +21,42 @@
       enabled: true,
     };
   });
+
+  let query = "";
 </script>
 
-<table style="width: 100%;">
+<input
+  bind:value={query}
+  placeholder="Search entries..."
+  style="width: 100%; margin: 0.5em 0;"
+/>
+<table class="tbl" style="width: 100%;">
   {#each dim_map as { dim, rate, enabled }}
-    <tr>
-        <td on:click={_ => (enabled = !enabled)} style="width: 70%; font-weight: bold; cursor: pointer;">{enabled ? "⯆" : "⯈"} {dim}</td>
-        <td>{rate} us/t</td>
+    {@const entries = (data.get(dim) ?? []).filter((x) =>
+      x.type.includes(query)
+    )}
+    <tr class="tbl">
+      <td
+        on:click={(_) => (enabled = !enabled)}
+        style="width: 50%; font-weight: bold; cursor: pointer;"
+        >{enabled ? "⯆" : "⯈"} {dim} -- {entries.length} entries</td
+      >
+      <td>{rate} us/t</td>
     </tr>
     {#if enabled}
-      {#each [...(data.get(dim) ?? [])] as entry}
-        <tr>
-            <td style="padding-left: 2em;">{entry.type}</td>
-            <td>{entry.rate / entry.ticks} us/t</td>
+      {#each entries as entry}
+        <tr class="tbl" style="font-size: 1em;">
+          <td style="padding-left: 2em;">{entry.type}</td>
+          <td>{entry.rate / entry.ticks} us/t</td>
         </tr>
       {/each}
     {/if}
   {/each}
 </table>
+
+<style>
+  .tbl {
+    border-bottom: 1px solid gray;
+    border-collapse: collapse;
+  }
+</style>

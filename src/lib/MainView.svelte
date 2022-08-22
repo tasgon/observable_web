@@ -14,18 +14,18 @@
   let activeTab = tabs[0].comp;
 </script>
 
-<main>
+<main style="">
   <nav class="navbar">
     {#each tabs as { name, comp }}
       <button
         on:click={(e) => (activeTab = comp)}
-        class={activeTab === comp ? "active" : ""}>{name}</button
+        class={"button " + (activeTab === comp ? "active" : "")}>{name}</button
       >
     {/each}
   </nav>
 
   {#each tabs as { name, comp }}
-    <div hidden={activeTab !== comp}>
+    <div hidden={activeTab !== comp} style="margin: 0 0.5em;">
       <svelte:component this={comp} />
     </div>
   {/each}
@@ -37,7 +37,14 @@
   }
   .navbar {
     width: 100vw;
+    background-color: rgba(100, 100, 100, 0.5);
     border-bottom: 1px gray;
-    margin-bottom: 1em;
+    padding-top: 0.1em;
+    margin-bottom: 0.5em;
+  }
+
+  .button {
+    border-radius: 0.5em 0.5em 0 0;
+    margin: 0 0.1rem;
   }
 </style>
