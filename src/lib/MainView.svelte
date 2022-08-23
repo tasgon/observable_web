@@ -12,6 +12,8 @@
   ];
 
   let activeTab = tabs[0].comp;
+
+  let showInfo = false;
 </script>
 
 <main style="">
@@ -19,16 +21,24 @@
     {#each tabs as { name, comp }}
       <button
         on:click={(e) => (activeTab = comp)}
-        class={"button " + (activeTab === comp ? "active" : "")}>{name}</button
-      >
+        class={"button " + (activeTab === comp ? "active" : "")}>{name}</button>
     {/each}
+
+    <button
+      on:click={(_) => (showInfo = !showInfo)}
+      style="float: right; margin-right: 0.25em;">Info</button>
   </nav>
 
-  {#each tabs as { name, comp }}
-    <div hidden={activeTab !== comp} style="margin: 0 0.5em;">
-      <svelte:component this={comp} />
-    </div>
-  {/each}
+  <div style="display: flex">
+    {#each tabs as { name, comp }}
+      {@const visible = activeTab === comp}
+      <div hidden={!visible} style="margin: 0 0.5em; width: 100%;">
+        <svelte:component this={comp} />
+      </div>
+    {/each}
+
+    <div hidden={showInfo === false} class="info" />
+  </div>
 </main>
 
 <style>
@@ -46,5 +56,10 @@
   .button {
     border-radius: 0.5em 0.5em 0 0;
     margin: 0 0.1rem;
+  }
+
+  .info {
+    width: 30vw;
+    height: 100vw;
   }
 </style>

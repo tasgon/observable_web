@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { setData } from "./data";
+  import { notif_text, setData } from "./data";
 
   import MainView from "./lib/MainView.svelte";
   import test_data from "./test_data.json";
@@ -26,6 +26,8 @@
   {:catch error}
     <h1 class="status err">{error}</h1>
   {/await}
+
+  <div hidden={$notif_text === ""} class="notif">{$notif_text}</div>
 </main>
 
 <style>
@@ -36,5 +38,17 @@
   }
   .err {
     color: red;
+  }
+
+  .notif {
+    position: fixed;
+    right: 10vw;
+    background: rgba(64, 64, 64, 0.8);
+    padding: 1em;
+    border-radius: 1em;
+    word-wrap: break-word;
+    text-align: center;
+    max-width: 50vw;
+    bottom: 5vh;
   }
 </style>

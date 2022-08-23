@@ -1,4 +1,5 @@
 {
     "pluginSearchDirs": ["./node_modules"],
-    "plugins": ["prettier-plugin-svelte"]
+    "plugins": ["prettier-plugin-svelte"],
+    "bracketSameLine": true
 }
