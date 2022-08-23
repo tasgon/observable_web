@@ -15,7 +15,7 @@
   }
   let aggregates = Array.from(aggregateMap.entries()).sort(
     ([_1, a], [_2, b]) => {
-      return b.rate / b.ticks - a.rate / a.ticks;
+      return b.rate - a.rate;
     }
   );
 </script>
@@ -24,7 +24,7 @@
   {#each aggregates as [name, { rate, ticks }]}
     <tr style="font-size: 1em;">
       <td style="padding-left: 2em;">{name}</td>
-      <td>{(rate / ticks).toFixed(2)} us/t ({ticks} ticks)</td>
+      <td>{Math.round(rate / 1000)} us/t ({ticks} ticks)</td>
     </tr>
   {/each}
 </table>

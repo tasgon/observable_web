@@ -10,6 +10,20 @@ export function getData(): Profile {
   return getContext("profiling_data");
 }
 
+export const getEntries = () => {
+  let result = new Map(Object.entries(getData().entities));
+  let global_ticks = getData().ticks;
+  for (let [name, entries] of Object.entries(getData().blocks)) {
+    let combined = [...(result.get(name) ?? []), ...entries];
+    for (let e of combined) {
+      e.rate *= e.ticks / global_ticks;
+    }
+    result.set(name, combined);
+  }
+  let ret = Array.from(result);
+  return ret;
+};
+
 export const notif_text = writable("");
 
 export function notify(msg: string) {
