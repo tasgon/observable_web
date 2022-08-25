@@ -27,7 +27,7 @@
     <h1 class="status err">{error}</h1>
   {/await}
 
-  <div hidden={$notif_text === ""} class="notif">{$notif_text}</div>
+  <div hidden={$notif_text === ""} class="notif">{@html $notif_text}</div>
 </main>
 
 <style>

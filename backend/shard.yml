@@ -1,0 +1,27 @@
+name: observable_server
+version: 0.1.0
+
+authors:
+  - tas <tasgon_@outlook.com>
+
+# description: |
+#   Short description of backend
+
+dependencies:
+  pg:
+    github: will/crystal-pg
+    version: "~> 0.5"
+  sqlite3:
+    github: crystal-lang/crystal-sqlite3
+  kemal:
+    github: kemalcr/kemal
+
+# development_dependencies:
+#   webmock:
+#     github: manastech/webmock.cr
+
+license: MPL-2.0
+
+targets:
+  observable_server:
+    main: src/main.cr 

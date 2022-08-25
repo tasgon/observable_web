@@ -60,7 +60,7 @@
               style="cursor: pointer; color: lightblue; display: inline-block;"
               on:click={(_) => {
                 window.navigator.clipboard.writeText(tp_text);
-                notify(`Copied '${tp_text}' to clipboard`);
+                notify(`Copied <code>${tp_text}</code> to clipboard`);
               }}>
               Visit
             </div>

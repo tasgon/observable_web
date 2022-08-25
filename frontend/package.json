@@ -13,6 +13,7 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.1",
     "@tsconfig/svelte": "^3.0.0",
+    "cbor-web": "^8.1.0",
     "prettier": "^2.7.1",
     "prettier-plugin-svelte": "^2.7.0",
     "svelte": "^3.49.0",
@@ -21,5 +22,6 @@
     "tslib": "^2.4.0",
     "typescript": "*",
     "vite": "^3.0.7"
-  }
+  },
+  "dependencies": {}
 }
