@@ -15,11 +15,14 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: set hash
+        run: |
+          echo "hash=$(git rev-parse HEAD")
       - uses: docker/build-push-action@v3
         with:
           context: backend/
           push: ${{ github.ref == 'refs/heads/master' }}
           tags: |
-            ghcr.io/${{ github.repository }}:${{ github.ref }}
+            ghcr.io/${{ github.repository }}:${{ env.hash }}
             ghcr.io/${{ github.repository }}:latest
 
