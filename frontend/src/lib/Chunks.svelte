@@ -1,23 +1,64 @@
 <script lang="ts">
-  import { getData, getEntries } from "../data";
+  import { entries, get_tp_command, notify } from "../data";
 
-  let entries = getEntries();
-  let chunkMap = entries.map(([name, entries]) => {
-    let chunkList: Map<{ x: number; z: number }, number> = new Map();
-    for (let e of entries) {
+  $: chunk_map = $entries.map(([name, ent]) => {
+    let chunkList: Map<
+      string,
+      {
+        chunk: { x: number; z: number };
+        rate: number;
+      }
+    > = new Map();
+    for (let e of ent) {
       let { x, y, z } = e.position;
-      let key = { x: Math.trunc(x / 16), z: Math.trunc(z / 16) };
-      let listEntry = chunkList.get(key) ?? 0;
-      listEntry += e.rate;
+      let chunk = { x: Math.trunc(x / 16), z: Math.trunc(z / 16) };
+      let key = `x${chunk.x}z${chunk.z}`;
+      let listEntry = chunkList.get(key) ?? {
+        chunk,
+        rate: 0,
+      };
+      listEntry.rate += e.rate;
       chunkList.set(key, listEntry);
     }
-    let sorted_chunks = Array.from(chunkList)
-      .sort(([_, a], [_2, b]) => b - a)
-      .map(([chunk, rate]) => {
-        return { chunk, rate };
+    let chunks = Array.from(chunkList)
+      .sort(([_, a], [_2, b]) => b.rate - a.rate)
+      .map(([_, entry]) => {
+        return entry;
       });
-    return { name, sorted_chunks };
+    return { name, chunks, enabled: true };
   });
 </script>
 
-<p>Chunks</p>
+<table class="tbl" style="width: 100%;">
+  {#each chunk_map as { name, chunks, enabled }}
+    {@const rate = chunks.reduce((acc, { rate }) => acc + rate, 0)}
+    <tr class="tbl">
+      <td
+        on:click={(_) => (enabled = !enabled)}
+        style="width: 50%; font-weight: bold; cursor: pointer;"
+        >{enabled ? "-" : "+"} {name} &mdash; {chunks.length} chunks</td>
+      <td>{Math.round(rate / 1000)} us/t</td>
+      <td>Position</td>
+    </tr>
+    {#if enabled}
+      {#each chunks as entry}
+        {@const { x, z } = entry.chunk}
+        {@const tp_text = get_tp_command(name, { x, y: 128, z })}
+        <tr style="font-size: 1em; border-bottom: 1px solid #404040;">
+          <td style="padding-left: 2em;">({x}, {z})</td>
+          <td>{Math.round(entry.rate / 1000)} us/t</td>
+          <td style="width: 30%;">
+            <div
+              style="cursor: pointer; color: lightblue; display: inline-block;"
+              on:click={(_) => {
+                window.navigator.clipboard.writeText(tp_text);
+                notify(`Copied <code>${tp_text}</code> to clipboard`);
+              }}>
+              Visit
+            </div>
+          </td>
+        </tr>
+      {/each}
+    {/if}
+  {/each}
+</table>

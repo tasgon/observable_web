@@ -1,31 +1,20 @@
 <script lang="ts">
-  import { getData, getEntries, notify } from "../data";
+  import { entries, get_tp_command, notify } from "../data";
   import type { Entry, Position } from "../types";
 
-  let data = new Map(
-    getEntries().map(([name, entries]) => [
+  $: data = new Map(
+    $entries.map(([name, entries]) => [
       name,
       entries.sort((a, b) => b.rate - a.rate),
     ])
   );
-  let dim_map = Array.from(data).map(([dim, entries]) => {
+  $: dim_map = Array.from(data).map(([dim, ent]) => {
     return {
       dim,
-      rate: entries.reduce((acc, i) => acc + i.rate / 1000, 0),
+      rate: ent.reduce((acc, i) => acc + i.rate / 1000, 0),
       enabled: true,
     };
   });
-
-  function get_tp_command(dimension: string, entry: number | Position) {
-    let cmd = `/observable tp ${dimension} `;
-    if (typeof entry === "number") {
-      cmd += `entity ${entry}`;
-    } else {
-      let { x, y, z } = entry;
-      cmd += `position ${x} ${y} ${z}`;
-    }
-    return cmd;
-  }
 
   let query = "";
 </script>
@@ -72,11 +61,6 @@
 </table>
 
 <style>
-  .tbl {
-    border-bottom: 1px solid #565656;
-    border-collapse: collapse;
-  }
-
   .search {
     width: 100%;
     margin: 0.5em 0;

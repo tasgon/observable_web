@@ -1,31 +1,29 @@
 <script lang="ts">
-  import { notif_text, setData } from "./data";
+  import { notif_text, data, getData } from "./data";
+  import Home from "./lib/Home.svelte";
 
   import MainView from "./lib/MainView.svelte";
-  import test_data from "./test_data.json";
 
-  const hash = window.location.hash.substring(1);
-  async function loadData() {
-    setData(test_data);
-    return;
-    if (hash.length == 0) {
-      throw new Error("profile ID cannot be empty");
-    }
-    const data = await fetch(`https://o.tas.sh/api/get/${hash}`);
-    setData(data.json());
-  }
+  let hash: string;
+  let update_hash = () => (hash = window.location.hash.substring(1));
 
-  let promise = loadData();
+  update_hash();
 </script>
 
+<svelte:window on:hashchange={update_hash} />
+
 <main>
-  {#await promise}
-    <h1 class="status">Loading {hash}...</h1>
-  {:then}
-    <MainView />
-  {:catch error}
-    <h1 class="status err">{error}</h1>
-  {/await}
+  {#if hash.length == 0}
+    <Home />
+  {:else}
+    {#await getData(hash)}
+      <h1 class="status">Loading {hash}...</h1>
+    {:then}
+      <MainView />
+    {:catch error}
+      <h1 class="status err">{error}</h1>
+    {/await}
+  {/if}
 
   <div hidden={$notif_text === ""} class="notif">{@html $notif_text}</div>
 </main>

@@ -23,5 +23,5 @@ dependencies:
 license: MPL-2.0
 
 targets:
-  observable_server:
+  server:
     main: src/main.cr 
