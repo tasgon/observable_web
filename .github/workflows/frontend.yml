@@ -3,7 +3,7 @@ name: Frontend
 on:
   push:
     branches:
-      - master  # Set a branch to deploy
+      - master
 
 jobs:
   deploy:
@@ -22,7 +22,7 @@ jobs:
           yarn install --frozen-lockfile
           yarn run build
       
-      - name: Deploy
+      - name: deploy site
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/master'
         with:
