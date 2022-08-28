@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - master
+    paths:
+      - backend/**
+      - .github/workflows/**
 
 jobs:
   deploy:
