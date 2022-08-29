@@ -2,16 +2,14 @@ require "kemal"
 require "db"
 require "sqlite3"
 
-db = DB.open "sqlite3://./data.db" do |db|
-  # db.exec "create table profiles (id text, contents text)"
-
+db = DB.open ENV["DB_URL"] do |db|
   serve_static false
 
   error 404 do
     "Unknown path"
   end
 
-  get "/" do |env|
+  get "/info" do |env|
     "Observable server #{`(git show-ref refs/heads/master --hash)`}"
   end
 
@@ -38,6 +36,10 @@ db = DB.open "sqlite3://./data.db" do |db|
       db.exec "insert into profiles values (?, ?)", id, body.gets_to_end
       id
     end
+  end
+
+  get "/" do |env|
+    env.redirect "https://o.tas.sh/"
   end
 
   Kemal.run 8080
