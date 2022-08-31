@@ -17,6 +17,9 @@ dependencies:
     github: kemalcr/kemal
   redis:
     github: stefanwille/crystal-redis
+  hashids:
+    github: splattael/hashids.cr
+    version: 0.3.0
 
 # development_dependencies:
 #   webmock:

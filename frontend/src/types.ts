@@ -18,3 +18,8 @@ export interface Entry {
   ticks: number;
   traces?: any;
 }
+
+export interface DataWithDiagnostics {
+  data: Profile;
+  diagnostics: { [s: string]: any };
+}

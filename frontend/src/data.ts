@@ -1,6 +1,6 @@
 import { getContext, setContext } from "svelte";
 import { derived, writable } from "svelte/store";
-import type { Position, Profile } from "./types";
+import type { DataWithDiagnostics, Position, Profile } from "./types";
 
 const API_URL = "https://observable.tas.sh/";
 export const api = (path: string) => `${API_URL}${path}`;
@@ -20,7 +20,8 @@ export async function getData(id: string) {
     return;
   }
   const api_val = await fetch(api(`/get/${id}`));
-  let profile: Profile = await api_val.json();
+  let new_data: DataWithDiagnostics = await api_val.json();
+  let profile = new_data.data;
   data_map.set(id, profile);
   data.set(profile);
 }

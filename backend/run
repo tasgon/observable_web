@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sleep 2
 PARAMS=""
 if [[ -v "${KEY_FILE}" ]]; then
   PARAMS="--ssl-key-file ${KEY_FILE} --ssl-cert-file ${CERT_FILE}"
