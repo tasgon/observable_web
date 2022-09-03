@@ -8,11 +8,11 @@ require "hashids"
 hashids = Hashids.new(salt: "Observable salt", min_hash_size: 4)
 redis = Redis.new(host: ENV["REDIS_HOST"], port: 6379)
 
-def incr_view_from(env : HTTP::Server::Context, redis : Redis)
+def incr_view_from(env : HTTP::Server::Context, redis : Redis, tag : String)
   src = env.request.remote_address
   addr = src.try &.as Socket::IPAddress
   if addr
-    tag = "e#{addr.address}"
+    tag = "e#{addr.address}-#{tag}"
     if redis.get(tag) == nil
       puts "Recording view from #{addr.address}:#{addr.port}"
       redis.setex tag, 600, "1"
@@ -28,9 +28,13 @@ DB.open(ENV["DB_URL"]) do |db|
     "Unknown path"
   end
 
+  before_all do |env|
+    env.response.headers["Access-Control-Allow-Origin"] = "*"
+  end
+
   get "/info" do |env|
     env.response.content_type = "application/json"
-    incr_view_from(env, redis)
+    incr_view_from(env, redis, "")
     {
       "views": redis.get("views").try &.to_i || 0,
       "profiles": redis.get("profiles").try &.to_i || 0
@@ -41,12 +45,10 @@ DB.open(ENV["DB_URL"]) do |db|
     hash = env.params.url["id"]
     begin
       id = hashids.decode(hash)[0]
-      puts "id: #{id}"
       contents = db.query_one "select contents from profiles where id=$1", id, as: Bytes
       env.response.content_type = "application/json"
       env.response.headers["Content-Encoding"] = "gzip"
-      incr_view_from(env, redis)
-      # puts "contents: #{contents}"
+      incr_view_from(env, redis, hash)
       env.response.write(contents)
     rescue DB::NoResultsError
       env.response.status_code = 404
