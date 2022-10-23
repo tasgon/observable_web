@@ -2,7 +2,7 @@ import { getContext, setContext } from "svelte";
 import { derived, writable } from "svelte/store";
 import type { DataWithDiagnostics, Position, Profile } from "./types";
 
-const API_URL = "https://observable.tas.sh/";
+const API_URL = "https://observable.tas.sh";
 export const api = (path: string) => `${API_URL}${path}`;
 
 export const data_map = new Map<string, Profile>();
