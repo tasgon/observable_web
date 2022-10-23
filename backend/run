@@ -3,6 +3,7 @@
 sleep 2
 PARAMS=""
 if [[ -v "${KEY_FILE}" ]]; then
+  echo "Running with ssl"
   PARAMS="--ssl --ssl-key-file ${KEY_FILE} --ssl-cert-file ${CERT_FILE}"
 fi
 
