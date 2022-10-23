@@ -5,14 +5,14 @@ import type { DataWithDiagnostics, Position, Profile } from "./types";
 const API_URL = "https://observable.tas.sh";
 export const api = (path: string) => `${API_URL}${path}`;
 
-export const data_map = new Map<string, Profile>();
-export const data = writable<Profile | null>(null);
+export const data_map = new Map<string, DataWithDiagnostics>();
+export const all_data = writable<DataWithDiagnostics | null>(null);
 
 export async function getData(id: string) {
   let val = data_map.get(id);
   console.log(id);
   if (val) {
-    data.set(val);
+    all_data.set(val);
     return;
   }
   if (id == "local_file") {
@@ -21,13 +21,15 @@ export async function getData(id: string) {
   }
   const api_val = await fetch(api(`/get/${id}`));
   let new_data: DataWithDiagnostics = await api_val.json();
-  let profile = new_data.data;
+  let profile = new_data;
   data_map.set(id, profile);
-  data.set(profile);
+  all_data.set(profile);
 }
 
+export const data = derived(all_data, ($all_data) => $all_data?.data);
+
 export const entries = derived(data, ($data) => {
-  if ($data === null) return [];
+  if (!$data) return [];
   let result = new Map(Object.entries($data.entities));
   let global_ticks = $data.ticks;
   for (let [name, entries] of Object.entries($data.blocks)) {

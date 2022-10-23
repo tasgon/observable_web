@@ -3,6 +3,7 @@
 
   import Chunks from "./Chunks.svelte";
   import Individual from "./Individual.svelte";
+  import Info from "./Info.svelte";
 
   const hash = window.location.hash.substring(1);
   let tabs = [
@@ -37,7 +38,9 @@
       </div>
     {/each}
 
-    <div hidden={showInfo === false} class="info" />
+    <div hidden={showInfo === false} class="info">
+      <Info />
+    </div>
   </div>
 </main>
 
@@ -61,5 +64,6 @@
   .info {
     width: 30vw;
     height: 100vw;
+    resize: horizontal;
   }
 </style>
