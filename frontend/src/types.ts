@@ -19,7 +19,17 @@ export interface Entry {
   traces?: any;
 }
 
+export interface Diagnostics {
+  user: string;
+  start: number;
+  duration: number;
+  minecraftVersion: string;
+  modLoader: string;
+  observableVersion: string;
+  additionalDiagnostics: { [s: string]: any };
+}
+
 export interface DataWithDiagnostics {
   data: Profile;
-  diagnostics: { [s: string]: any };
+  diagnostics: Diagnostics;
 }

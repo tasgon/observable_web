@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { notif_text, data, getData } from "./data";
+  import { notif_text, getData } from "./data";
   import Home from "./lib/Home.svelte";
 
   import MainView from "./lib/MainView.svelte";

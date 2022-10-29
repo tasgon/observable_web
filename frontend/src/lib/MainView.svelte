@@ -3,6 +3,7 @@
 
   import Chunks from "./Chunks.svelte";
   import Individual from "./Individual.svelte";
+  import Diagnostics from "./Diagnostics.svelte";
   import Info from "./Info.svelte";
 
   const hash = window.location.hash.substring(1);
@@ -10,6 +11,7 @@
     { name: "Individual Results", comp: Individual },
     { name: "Chunks", comp: Chunks },
     { name: "Aggregate Results", comp: Aggregate },
+    { name: "Info", comp: Diagnostics}
   ];
 
   let activeTab = tabs[0].comp;
@@ -19,28 +21,30 @@
 
 <main style="">
   <nav class="navbar">
+    <a href="/" style="display: flex; align-items: center;">
+      <img src="logo.png" alt="Observable" style="height: 2em; padding: 0 0.25em;" />
+    </a>
+
     {#each tabs as { name, comp }}
       <button
         on:click={(e) => (activeTab = comp)}
         class={"button " + (activeTab === comp ? "active" : "")}>{name}</button>
     {/each}
 
-    <button
-      on:click={(_) => (showInfo = !showInfo)}
-      style="float: right; margin-right: 0.25em;">Info</button>
+    <div class="info">
+      <Info />
+    </div>
+
+    <button>Download</button>
   </nav>
 
   <div style="display: flex">
-    {#each tabs as { name, comp }}
+    {#each tabs as { comp }}
       {@const visible = activeTab === comp}
       <div hidden={!visible} style="margin: 0 0.5em; width: 100%;">
         <svelte:component this={comp} />
       </div>
     {/each}
-
-    <div hidden={showInfo === false} class="info">
-      <Info />
-    </div>
   </div>
 </main>
 
@@ -54,6 +58,7 @@
     border-bottom: 1px gray;
     padding-top: 0.1em;
     margin-bottom: 0.5em;
+    display: flex;
   }
 
   .button {
@@ -62,8 +67,9 @@
   }
 
   .info {
-    width: 30vw;
-    height: 100vw;
-    resize: horizontal;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>

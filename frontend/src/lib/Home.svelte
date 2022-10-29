@@ -1,6 +1,6 @@
 <script lang="ts">
   import { data_map, notify } from "../data";
-  import type { Profile } from "../types";
+  import type { DataWithDiagnostics, Profile } from "../types";
 
   let files: FileList | null = null;
 
@@ -9,7 +9,7 @@
     file.arrayBuffer().then((data) => {
       try {
         let string_data = String.fromCharCode.apply(null, new Uint8Array(data));
-        let profile: Profile = JSON.parse(string_data);
+        let profile: DataWithDiagnostics = JSON.parse(string_data);
         data_map.set("local_file", profile);
         window.location.href = "#local_file";
       } catch (e) {
