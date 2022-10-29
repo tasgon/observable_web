@@ -7,8 +7,10 @@ export const api = (path: string) => `${API_URL}${path}`;
 
 export const data_map = new Map<string, DataWithDiagnostics>();
 export const all_data = writable<DataWithDiagnostics | null>(null);
+export let entry_id = "";
 
 export async function getData(id: string) {
+  entry_id = id;
   let val = data_map.get(id);
   console.log(id);
   if (val) {

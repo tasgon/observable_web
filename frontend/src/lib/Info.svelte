@@ -3,11 +3,11 @@
 
   $: info = $all_data?.diagnostics;
 
-  let user = "unknown";
+  $: user = "unknown";
   $: if (info?.user) {
-    fetch(`https://minecraft-api.com/api/pseudo/${info.user}`)
-      .then((res) => res.text())
-      .then((res) => (user = res));
+    fetch(`https://api.ashcon.app/mojang/v2/user/${info.user}`)
+      .then((res) => res.json())
+      .then((res) => (user = res.username));
   }
   $: duration = info?.duration
     ? Math.floor(info.duration / 1000.0).toString()

@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?jxnf9p');
-  src:  url('fonts/icomoon.eot?jxnf9p#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?jxnf9p') format('truetype'),
-    url('fonts/icomoon.woff?jxnf9p') format('woff'),
-    url('fonts/icomoon.svg?jxnf9p#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?tg4fmz');
+  src:  url('fonts/icomoon.eot?tg4fmz#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?tg4fmz') format('truetype'),
+    url('fonts/icomoon.woff?tg4fmz') format('woff'),
+    url('fonts/icomoon.svg?tg4fmz#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -37,4 +37,7 @@
 }
 .icon-hour-glass:before {
   content: "\e979";
+}
+.icon-cloud-download:before {
+  content: "\e9c2";
 }
