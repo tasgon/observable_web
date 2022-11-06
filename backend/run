@@ -1,11 +1,5 @@
 #!/bin/bash
 
-sleep 2
-PARAMS=""
+sleep 3
 echo "Initializing observable api"
-if [[ -n "${KEY_FILE}" ]]; then
-  echo "Running with ssl"
-  PARAMS="--ssl --ssl-key-file ${KEY_FILE} --ssl-cert-file ${CERT_FILE}"
-fi
-
-./server ${PARAMS}
+./server ${OBSERVABLE_PARAMS}

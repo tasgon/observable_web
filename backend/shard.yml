@@ -2,7 +2,7 @@ name: observable_server
 version: 0.1.0
 
 authors:
-  - tas <tasgon_@outlook.com>
+  - tas <me@tas.sh>
 
 # description: |
 #   Short description of backend
@@ -15,8 +15,6 @@ dependencies:
     github: crystal-lang/crystal-sqlite3
   kemal:
     github: kemalcr/kemal
-  redis:
-    github: stefanwille/crystal-redis
   hashids:
     github: splattael/hashids.cr
     version: 0.3.0

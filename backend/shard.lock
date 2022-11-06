@@ -12,6 +12,10 @@ shards:
     git: https://github.com/crystal-loot/exception_page.git
     version: 0.2.2
 
+  hashids:
+    git: https://github.com/splattael/hashids.cr.git
+    version: 0.3.0
+
   kemal:
     git: https://github.com/kemalcr/kemal.git
     version: 1.2.0

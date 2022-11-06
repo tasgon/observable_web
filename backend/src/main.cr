@@ -2,43 +2,19 @@ require "kemal"
 require "db"
 require "sqlite3"
 require "pg"
-require "redis"
 require "hashids"
 
-hashids = Hashids.new(salt: "Observable salt", min_hash_size: 4)
-redis = Redis.new(host: ENV["REDIS_HOST"], port: 6379)
-
-def incr_view_from(env : HTTP::Server::Context, redis : Redis, tag : String)
-  src = env.request.remote_address
-  addr = src.try &.as Socket::IPAddress
-  if addr
-    tag = "e#{addr.address}-#{tag}"
-    if redis.get(tag) == nil
-      puts "Recording view from #{addr.address}:#{addr.port}"
-      redis.setex tag, 600, "1"
-      redis.incr "views"
-    end
-  end
-end
+hashids = Hashids.new(salt: ENV["OBSERVABLE_SALT"], min_hash_size: 4)
 
 DB.open(ENV["DB_URL"]) do |db|
   serve_static false
 
-  error 404 do
-    "Unknown path"
+  error 404 do |env|
+    "Unknown path #{env.request.path}"
   end
 
   before_all do |env|
-    env.response.headers["Access-Control-Allow-Origin"] = "*"
-  end
-
-  get "/info" do |env|
-    env.response.content_type = "application/json"
-    incr_view_from(env, redis, "")
-    {
-      "views": redis.get("views").try &.to_i || 0,
-      "profiles": redis.get("profiles").try &.to_i || 0
-    }.to_json
+    env.response.headers["Access-Control-Allow-Origin"] = ENV["ALLOWED_ORIGINS"]
   end
 
   get "/get/:id" do |env|
@@ -48,7 +24,6 @@ DB.open(ENV["DB_URL"]) do |db|
       contents = db.query_one "select contents from profiles where id=$1", id, as: Bytes
       env.response.content_type = "application/json"
       env.response.headers["Content-Encoding"] = "gzip"
-      incr_view_from(env, redis, hash)
       env.response.write(contents)
     rescue DB::NoResultsError
       env.response.status_code = 404
@@ -58,16 +33,10 @@ DB.open(ENV["DB_URL"]) do |db|
   post "/add" do |env|
     body = env.request.body
     if body
-      redis.incr("profiles")
       id = db.query_one "insert into profiles (contents) values ($1) returning id", body.getb_to_end, as: Int32
-      puts "last id: #{id}"
       hash = hashids.encode [id]
       "https://o.tas.sh/\##{hash}"
     end
-  end
-
-  get "/" do |env|
-    env.redirect "https://o.tas.sh/"
   end
 
   Kemal.run 8080
