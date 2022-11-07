@@ -15,12 +15,15 @@
 </script>
 
 <div>
-  <div class="icon-user" />{user}
+  <div class="icon-user" />
+  {user}
   {#if info?.start}
     {@const date_str = new Date(info.start).toLocaleString()}
-    <div class="icon-clock" />{date_str}
+    <div class="icon-clock" />
+    {date_str}
   {/if}
   {#if duration}
-    <div class="icon-hour-glass" />{duration}s
+    <div class="icon-hour-glass" />
+    {duration}s
   {/if}
 </div>

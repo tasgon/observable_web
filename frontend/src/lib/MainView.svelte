@@ -12,7 +12,7 @@
     { name: "Individual Results", comp: Individual },
     { name: "Chunks", comp: Chunks },
     { name: "Aggregate Results", comp: Aggregate },
-    { name: "Info", comp: Diagnostics}
+    { name: "Info", comp: Diagnostics },
   ];
 
   let activeTab = tabs[0].comp;
@@ -28,13 +28,16 @@
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(url);
-  }
+  };
 </script>
 
 <main style="">
   <nav class="navbar">
     <a href="/" style="display: flex; align-items: center;">
-      <img src="logo.png" alt="Observable" style="height: 2em; padding: 0 0.25em;" />
+      <img
+        src="logo.png"
+        alt="Observable"
+        style="height: 2em; padding: 0 0.25em;" />
     </a>
 
     {#each tabs as { name, comp }}
@@ -47,7 +50,10 @@
       <Info />
     </div>
 
-    <button class="icon-cloud-download" style="padding: 1em;" on:click={download} />
+    <button
+      class="icon-cloud-download"
+      style="padding: 1em;"
+      on:click={download} />
   </nav>
 
   <div style="display: flex">

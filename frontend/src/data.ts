@@ -1,4 +1,3 @@
-import { getContext, setContext } from "svelte";
 import { derived, writable } from "svelte/store";
 import type { DataWithDiagnostics, Position, Profile } from "./types";
 
