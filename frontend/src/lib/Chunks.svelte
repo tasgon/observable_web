@@ -43,7 +43,7 @@
     {#if enabled}
       {#each chunks as entry}
         {@const { x, z } = entry.chunk}
-        {@const tp_text = get_tp_command(name, { x, y: 128, z })}
+        {@const tp_text = get_tp_command(name, { x: x * 16, y: 128, z: z * 16 })}
         <tr style="font-size: 1em; border-bottom: 1px solid #404040;">
           <td style="padding-left: 2em;">({x}, {z})</td>
           <td>{Math.round(entry.rate / 1000)} us/t</td>
