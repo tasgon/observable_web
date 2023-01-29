@@ -3,6 +3,7 @@
   import Home from "./lib/Home.svelte";
 
   import MainView from "./lib/MainView.svelte";
+  import OctoCat from "./lib/OctoCat.svelte";
 
   let hash: string;
   let update_hash = () => (hash = window.location.hash.substring(1));
@@ -26,6 +27,7 @@
   {/if}
 
   <div hidden={$notif_text === ""} class="notif">{@html $notif_text}</div>
+  <OctoCat />
 </main>
 
 <style>

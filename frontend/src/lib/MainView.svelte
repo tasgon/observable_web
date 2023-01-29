@@ -52,7 +52,7 @@
 
     <button
       class="icon-cloud-download"
-      style="padding: 1em;"
+      style="padding: 1em; margin-right: 3.5em;"
       on:click={download} />
   </nav>
 
