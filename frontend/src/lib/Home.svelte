@@ -53,8 +53,9 @@
     <a href="https://modrinth.com/mod/observable">Modrinth</a>, or
     <a href="https://github.com/tasgon/observable/releases">GitHub</a>.
   </p>
+    <p>To get started, bind the "Show profiler screen" key to whatever you prefer, or use &apos;/observable&apos.</p>
     <p>
-      Wanna figure out how to use it? Go
+      For more details, go
       <a href="https://github.com/tasgon/observable/wiki">here</a> for an
       incomplete wiki or ask me on
       <a href="https://discord.gg/sfPbb3b5tF">Discord</a> for help.
