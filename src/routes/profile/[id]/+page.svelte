@@ -1,95 +1,82 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { notification } from '$lib/stores';
-	import { get_tp_command } from '$lib/utils';
+	import { TabulatorFull as Tabulator } from 'tabulator-tables';
+	import 'tabulator-tables/src/scss/tabulator.scss';
 	import type { PageData } from './$types';
+	import { copyTPCommand } from '$lib/utils';
+	import { Loader2 } from 'lucide-svelte';
+	import type { Position } from '$lib/types';
 
 	export let data: PageData;
 
-	const WINDOW_SIZE = 100;
-
-	let query = '';
-
-  $: console.log([...new Set(data.entries.flatMap(([_, entries]) => (entries.map(i => i.type))))]);
-
-	$: dim_map = data.entries.map(([dim, entries]) => {
-		return {
+	$: dimensions = data.entries.map(([dim, _]) => dim);
+	$: rowData = data.entries.flatMap(([dim, entries]) => {
+		return entries.map((entry) => ({
 			dim,
-			rate: entries.reduce((acc, i) => acc + i.rate / 1000, 0),
-			enabled: true,
-			offset: 0,
-			entries: entries.filter(i => i.type.includes(query))
-		};
+			...entry
+		}));
 	});
+
+	let tableEl: HTMLDivElement | undefined;
+	let loaded = false;
+
+	$: if (tableEl) {
+		const table = new Tabulator(tableEl, {
+			height: '92vh',
+			data: rowData,
+			selectable: false,
+			layout: 'fitColumns',
+			columns: [
+				{
+					title: 'Dimension',
+					field: 'dim',
+					headerFilter: 'list',
+					headerSort: false,
+					headerFilterPlaceholder: 'Filter dimensions...',
+					headerFilterParams: { values: dimensions, freetext: true, autocomplete: true }
+				},
+				{
+					title: 'Type',
+					field: 'type',
+					headerFilter: true,
+					headerSort: false,
+					headerFilterPlaceholder: 'Search...'
+				},
+				{
+					title: 'Position (click to copy)',
+					field: 'position',
+					headerSort: false,
+					cellClick(_, cell) {
+						const data = cell.getData() as (typeof rowData)[0];
+						copyTPCommand(data.dim, data.entityId ?? data.position);
+					},
+					formatter(cell) {
+						const { x, y, z } = cell.getValue() as Position;
+						return `(${x}, ${y}, ${z})`;
+					}
+				},
+				{
+					title: 'Rate',
+					field: 'rate',
+					sorter: 'number',
+					headerSort: false,
+					formatter(cell) {
+						const rate = cell.getValue() as number;
+						return `${Math.round(rate / 10.0) / 100.0} us/t`;
+					}
+				}
+			],
+			initialSort: [{ column: 'rate', dir: 'desc' }]
+		});
+		table.on('tableBuilt', () => (loaded = true));
+	}
 </script>
 
-<div class="w-full">
-	<input
-		bind:value={query}
-		placeholder="Search entries..."
-		class="w-full mx-2 bg-slate-900 focus:outline-none"
-	/>
-</div>
-<table class="border-b w-full">
-	{#each dim_map as { dim, rate, enabled, entries, offset }}
-		{@const slice = entries.slice(offset, Math.min(offset + WINDOW_SIZE, entries.length))}
-		<tr class="border-b h-min">
-			<td on:click={(_) => (enabled = !enabled)} class="font-bold cursor-pointer">
-				<span>{enabled ? '-' : '+'} {dim}</span>
-				<span>&mdash; {entries.length} entries</span>
-			</td>
-			<td>{Math.round(rate)} us/t</td>
-			<td>Position</td>
-		</tr>
-		<tbody hidden={!enabled}>
-			<tr class="tbtn" on:click={(_) => (offset -= WINDOW_SIZE)} hidden={offset == 0}
-				><div>&minus;</div></tr
-			>
-			{#each slice as entry}
-				{@const tp_text = get_tp_command(dim, entry.entityId ?? entry.position)}
-				{@const { x, y, z } = entry.position}
-				<tr>
-					<td class="pl-4">{entry.type}</td>
-					<td>{Math.round(entry.rate / 1000)} us/t</td>
-					<td style="width: 30%;">
-						<div class="min-w-[30%] inline-block">
-							({x}, {y}, {z})
-						</div>
+{#if !loaded}
+	<div class="w-full flex items-center justify-center">
+		<div class="animate-spin h-min w-min">
+			<Loader2 />
+		</div>
+	</div>
+{/if}
 
-						<button
-							type="button"
-							class="text-blue-500"
-							on:click={(_) => {
-								window.navigator.clipboard.writeText(tp_text);
-								$notification = `Copied <code>${tp_text}</code> to clipboard`;
-							}}
-						>
-							Visit
-						</button>
-					</td>
-				</tr>
-			{/each}
-			<tr
-				class="tbtn"
-				on:click={(_) => (offset += WINDOW_SIZE)}
-				hidden={offset + WINDOW_SIZE > entries.length}><div>&plus;</div></tr
-			>
-		</tbody>
-	{/each}
-</table>
-
-<style>
-	.tbtn {
-		cursor: pointer;
-	}
-
-	.tbtn > div {
-		padding-left: 3em;
-		user-select: none;
-	}
-
-	tr {
-		font-size: 1em;
-		border-bottom: 1px solid #404040;
-	}
-</style>
+<div bind:this={tableEl} class="mt-1 w-full px-2 h-[80vh]" />

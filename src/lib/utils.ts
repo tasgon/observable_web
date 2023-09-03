@@ -1,9 +1,10 @@
+import { notification } from "./stores";
 import type { Position } from "./types";
 
-export function get_tp_command(
+export function copyTPCommand(
   dimension: string,
   entry: number | Position
-): string {
+) {
   let cmd = `/observable tp ${dimension} `;
   if (typeof entry === "number") {
     cmd += `entity ${entry}`;
@@ -11,5 +12,6 @@ export function get_tp_command(
     let { x, y, z } = entry;
     cmd += `position ${x} ${y} ${z}`;
   }
-  return cmd;
+  window.navigator.clipboard.writeText(cmd);
+  notification.set(`Copied <code>${cmd}</code> to clipboard`);
 }
