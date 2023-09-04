@@ -14,7 +14,7 @@
 			rate: entries.reduce((acc, i) => acc + i.rate / 1000, 0),
 			enabled: true,
 			offset: 0,
-			entries: entries.filter(i => i.type.includes(query))
+			entries: entries.filter((i) => i.type.includes(query))
 		};
 	});
 </script>

@@ -1,5 +1,5 @@
 export async function POST({ request }) {
-  const body = request.body;
+	const body = request.body;
 
-  return new Response("");
+	return new Response('');
 }

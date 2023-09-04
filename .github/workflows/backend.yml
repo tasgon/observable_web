@@ -28,4 +28,3 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:${{ env.hash }}
             ghcr.io/${{ github.repository }}:latest
-

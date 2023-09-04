@@ -11,18 +11,18 @@
 
 	let files: FileList | null = null;
 
-  $: if (files && files?.length > 0) {
-    const file = files[0];
-    file.arrayBuffer().then((data) => {
-      try {
-        let string_data = new TextDecoder().decode(data);
-        $localData = JSON.parse(string_data);
-        goto('/p');
-      } catch (e) {
-        $notification = `Couldn't open ${file.name}: ${e}`;
-      }
-    });
-  }
+	$: if (files && files?.length > 0) {
+		const file = files[0];
+		file.arrayBuffer().then((data) => {
+			try {
+				let string_data = new TextDecoder().decode(data);
+				$localData = JSON.parse(string_data);
+				goto('/p');
+			} catch (e) {
+				$notification = `Couldn't open ${file.name}: ${e}`;
+			}
+		});
+	}
 </script>
 
 <div class="w-full flex flex-col items-center">
@@ -61,7 +61,7 @@
 </div>
 
 <style lang="postcss">
-  a {
-    @apply text-blue-400;
-  }
+	a {
+		@apply text-blue-400;
+	}
 </style>
