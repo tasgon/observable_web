@@ -56,35 +56,3 @@
 		<slot />
 	</div>
 </div>
-
-<style lang="postcss">
-  :global(.tabulator) {
-    @apply bg-transparent border-none !important;
-  }
-  :global(.tabulator-table) {
-    @apply border-0 bg-slate-900 border-none !important;
-  }
-  :global(.tabulator-col) {
-    @apply bg-slate-700 text-slate-200 border-slate-500 !important;
-  }
-  :global(.tabulator-row) {
-    @apply text-slate-200 border-slate-500 !important;
-  }
-  :global(.tabulator-row-odd) {
-    @apply bg-slate-800 !important;
-  }
-  :global(.tabulator-row-even) {
-    @apply bg-slate-900 !important;
-  }
-
-  :global(.tabulator-header-filter > input) {
-    @apply bg-slate-600 !important;
-  }
-  :global(.tabulator-header-filter > input::-webkit-search-cancel-button) {
-    @apply hidden !important;
-  }
-
-  :global(.tabulator-data-tree-control) {
-	@apply invert;
-  }
-</style>

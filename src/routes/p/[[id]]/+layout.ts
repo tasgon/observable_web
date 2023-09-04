@@ -1,4 +1,7 @@
+import { localData } from "$lib/stores";
+import { get } from "svelte/store";
 import type { DataWithDiagnostics, Profile } from "../../../lib/types";
+import { error } from "@sveltejs/kit";
 
 export const ssr = false;
 
@@ -11,6 +14,7 @@ const getEntries = (profile: Profile) => {
     for (let e of combined) {
       e.rate *= e.ticks / global_ticks;
     }
+    combined.sort((a, b) => b.rate - a.rate);
     result.set(name, combined);
   }
   let ret = Array.from(result);
@@ -18,8 +22,16 @@ const getEntries = (profile: Profile) => {
 };
 
 export async function load({ params, fetch }) {
-  const res = await fetch(`/v1/get/${params.id}`);
-  let { data: profile, diagnostics }: DataWithDiagnostics = await res.json();
+  let data: DataWithDiagnostics;
+  if (!params.id) {
+    const local = get(localData);
+    if (!local) throw error(404, "No data");
+    data = local;
+  } else {
+    const res = await fetch(`/v1/get/${params.id}`);
+    data = await res.json();
+  }
+  let { data: profile, diagnostics } = data;
   return {
     profile,
     diagnostics,
