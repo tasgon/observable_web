@@ -31,7 +31,7 @@
     <p class="mt-1 text-6xl">Observable</p>
     <p>a thing by <a href="https://tas.sh">tas</a></p>
   </div>
-  <div class="max-w-2xl pt-1 gap-3 [&>*]:my-2">
+  <div class="max-w-xl pt-1 gap-3 [&>*]:my-2">
     <p>
       Observable profiles (tile) entities and shows you what's taking up tick time and where. Forge
       and Fabric compatible. Get it on
@@ -52,7 +52,7 @@
 
     <form>
       <p>
-        Have a local profile you want to analyze? Drop it anywhere on the screen, or just click
+        Have a local profile you want to analyze? Open it 
         <label for="file-upload" style="cursor: pointer; color: #646cff;">here</label>.
       </p>
       <input type="file" id="file-upload" style="display: none;" bind:files accept=".json" />
