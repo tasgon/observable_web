@@ -2,9 +2,6 @@ import type { DataWithDiagnostics, Profile } from "../../../lib/types";
 
 export const ssr = false;
 
-const API_URL = "https://observable.tas.sh";
-const api = (path: string) => `${API_URL}${path}`;
-
 const getEntries = (profile: Profile) => {
   if (!profile) return [];
   let result = new Map(Object.entries(profile.entities));
@@ -21,8 +18,8 @@ const getEntries = (profile: Profile) => {
 };
 
 export async function load({ params, fetch }) {
-  const api_val = await fetch(api(`/get/${params.id}`));
-  let { data: profile, diagnostics }: DataWithDiagnostics = await api_val.json();
+  const res = await fetch(`/v1/get/${params.id}`);
+  let { data: profile, diagnostics }: DataWithDiagnostics = await res.json();
   return {
     profile,
     diagnostics,

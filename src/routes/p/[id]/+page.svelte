@@ -4,16 +4,17 @@
 	import type { PageData } from './$types';
 	import { copyTPCommand } from '$lib/utils';
 	import { Loader2 } from 'lucide-svelte';
-	import type { Position } from '$lib/types';
+	import type { Entry, Position } from '$lib/types';
 
 	export let data: PageData;
 
-	$: dimensions = data.entries.map(([dim, _]) => dim);
-	$: rowData = data.entries.flatMap(([dim, entries]) => {
-		return entries.map((entry) => ({
-			dim,
-			...entry
-		}));
+	$: rowData = data.entries.map(([dim, entries]) => {
+		return {
+			type: dim,
+			rate: entries.reduce((acc, i) => i.rate + acc, 0.0),
+      header: true,
+			_children: entries,
+		}
 	});
 
 	let tableEl: HTMLDivElement | undefined;
@@ -25,20 +26,18 @@
 			data: rowData,
 			selectable: false,
 			layout: 'fitColumns',
+			dataTree: true,
+      dataTreeStartExpanded: true,
 			columns: [
 				{
-					title: 'Dimension',
-					field: 'dim',
-					headerFilter: 'list',
-					headerSort: false,
-					headerFilterPlaceholder: 'Filter dimensions...',
-					headerFilterParams: { values: dimensions, freetext: true, autocomplete: true }
-				},
-				{
-					title: 'Type',
+					title: 'Name',
 					field: 'type',
 					headerFilter: true,
 					headerSort: false,
+          headerFilterFunc(headerValue: string, rowValue: string, rowdata: Entry | (typeof rowData)[0]) {
+            if ('header' in rowdata) return true;
+            return rowValue.includes(headerValue);
+          },
 					headerFilterPlaceholder: 'Search...'
 				},
 				{
@@ -46,11 +45,16 @@
 					field: 'position',
 					headerSort: false,
 					cellClick(_, cell) {
-						const data = cell.getData() as (typeof rowData)[0];
-						copyTPCommand(data.dim, data.entityId ?? data.position);
+						const parent = cell.getRow().getTreeParent();
+						if (!parent) return;
+						const dim = parent.getData().type;
+						const data = cell.getData() as (typeof rowData)[0]["_children"][0];
+						copyTPCommand(dim, data.entityId ?? data.position);
 					},
 					formatter(cell) {
-						const { x, y, z } = cell.getValue() as Position;
+            const v = cell.getValue() as Position | undefined;
+						if (!v) return '';
+						const { x, y, z } = v;
 						return `(${x}, ${y}, ${z})`;
 					}
 				},
@@ -67,7 +71,9 @@
 			],
 			initialSort: [{ column: 'rate', dir: 'desc' }]
 		});
-		table.on('tableBuilt', () => (loaded = true));
+		table.on('tableBuilt', () => {
+      loaded = true;
+    });
 	}
 </script>
 

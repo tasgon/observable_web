@@ -5,7 +5,7 @@
 
 	export let data: LayoutData;
 
-	$: basePath = `/profile/${$page.params.id}`;
+	$: basePath = `/p/${$page.params.id}`;
 	$: tabs = [
 		{ name: 'Individual', path: `${basePath}` },
 		{ name: 'Chunks', path: `${basePath}/chunks` },
@@ -82,5 +82,9 @@
   }
   :global(.tabulator-header-filter > input::-webkit-search-cancel-button) {
     @apply hidden !important;
+  }
+
+  :global(.tabulator-data-tree-control) {
+	@apply invert;
   }
 </style>
