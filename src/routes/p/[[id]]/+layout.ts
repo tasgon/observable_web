@@ -1,24 +1,36 @@
 import { localData } from '$lib/stores';
 import { get } from 'svelte/store';
-import type { DataWithDiagnostics, Profile } from '../../../lib/types';
+import type { DataWithDiagnostics, Entry, Profile } from '../../../lib/types';
 import { error } from '@sveltejs/kit';
 
 export const ssr = false;
 
 const getEntries = (profile: Profile) => {
   if (!profile) return [];
-  let result = new Map(Object.entries(profile.entities));
-  let global_ticks = profile.ticks;
+  let entityMap = new Map(Object.entries(profile.entities));
+  let globalTicks = profile.ticks;
+  let result: {
+    name: string;
+    rate: number;
+    entries: Entry[];
+  }[] = [];
   for (let [name, entries] of Object.entries(profile.blocks)) {
-    let combined = [...(result.get(name) ?? []), ...entries];
+    let combined = [...(entityMap.get(name) ?? []), ...entries];
+    let rate = 0;
     for (let e of combined) {
-      e.rate *= e.ticks / global_ticks;
+      // Normalize
+      e.rate *= e.ticks / globalTicks;
+
+      rate += e.rate;
     }
     combined.sort((a, b) => b.rate - a.rate);
-    result.set(name, combined);
+    result.push({
+      name,
+      rate,
+      entries: combined
+    });
   }
-  let ret = Array.from(result);
-  return ret;
+  return result.sort((a, b) => b.rate - a.rate);
 };
 
 export async function load({ params, fetch }) {

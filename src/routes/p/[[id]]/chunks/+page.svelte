@@ -5,37 +5,37 @@
 
   export let data: PageData;
 
-  $: chunk_map = data.entries.map(([name, ent]) => {
-    let chunkList: Map<
-      string,
-      {
-        chunk: { x: number; z: number };
-        rate: number;
+  $: chunkMap = data.entries
+    .map(({ name, entries, rate }) => {
+      let chunkList: Map<
+        string,
+        {
+          chunk: { x: number; z: number };
+          rate: number;
+        }
+      > = new Map()
+      for (let entry of entries) {
+        let { x, z } = entry.position;
+        let chunk = { x: Math.trunc(x / 16), z: Math.trunc(z / 16) };
+        let key = `x${chunk.x}z${chunk.z}`;
+        let listEntry = chunkList.get(key) ?? {
+          chunk,
+          rate: 0
+        };
+        listEntry.rate += entry.rate;
+        chunkList.set(key, listEntry);
       }
-    > = new Map();
-    for (let e of ent) {
-      let { x, y, z } = e.position;
-      let chunk = { x: Math.trunc(x / 16), z: Math.trunc(z / 16) };
-      let key = `x${chunk.x}z${chunk.z}`;
-      let listEntry = chunkList.get(key) ?? {
-        chunk,
-        rate: 0
-      };
-      listEntry.rate += e.rate;
-      chunkList.set(key, listEntry);
-    }
-    let chunks = Array.from(chunkList)
-      .sort(([_, a], [_2, b]) => b.rate - a.rate)
-      .map(([_, entry]) => {
-        return entry;
-      });
-    return { name, chunks, enabled: true };
-  });
+      let chunks = Array.from(chunkList)
+        .sort(([_, a], [_2, b]) => b.rate - a.rate)
+        .map(([_, entry]) => {
+          return entry;
+        });
+      return { name, chunks, rate, enabled: true };
+    });
 </script>
 
-<table class="tbl" style="width: 100%;">
-  {#each chunk_map as { name, chunks, enabled }}
-    {@const rate = chunks.reduce((acc, { rate }) => acc + rate, 0)}
+<table class="border-b w-full">
+  {#each chunkMap as { name, chunks, rate, enabled }}
     <tr class="tbl">
       <td
         on:click={(_) => (enabled = !enabled)}

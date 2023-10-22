@@ -25,13 +25,15 @@
 </script>
 
 <div class="h-screen">
-  <nav class="mt-0 pl-2 flex flex-row items-end w-full bg-slate-800">
+  <nav class="mt-0 pl-2 flex flex-row items-end w-full bg-neutral-800">
     {#each tabs as { name, path }}
       {@const focused = $page.url.pathname === path}
       <a
         href={path}
-        class="p-2 mx-1 rounded-t-md {focused ? 'bg-slate-900' : 'bg-slate-700'}"
-        class:hover:bg-slate-800={!focused}
+        class="p-2 mx-1 rounded-t-md {focused
+          ? 'bg-neutral-900'
+          : 'bg-neutral-700'} transition ease-in-out duration-100"
+        class:hover:bg-neutral-800={!focused}
       >
         {name}
       </a>

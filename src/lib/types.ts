@@ -1,6 +1,6 @@
 export interface Profile {
-  entities: { [s: string]: Entry[] };
-  blocks: { [s: string]: Entry[] };
+  entities: Record<string, Entry[]>;
+  blocks: Record<string, Entry[]>;
   ticks: number;
 }
 

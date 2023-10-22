@@ -26,7 +26,7 @@
 </script>
 
 <div class="w-full flex flex-col items-center">
-  <div class="bg-slate-800 w-full flex flex-col items-center pt-4 pb-1">
+  <div class="bg-neutral-800 w-full flex flex-col items-center pt-4 pb-1">
     <img src={logo} alt="Observable logo" class="rounded-lg max-w-[10rem]" />
     <p class="mt-1 text-6xl">Observable</p>
     <p>a thing by <a href="https://tas.sh">tas</a></p>
@@ -52,7 +52,7 @@
 
     <form>
       <p>
-        Have a local profile you want to analyze? Open it 
+        Have a local profile you want to analyze? Open it
         <label for="file-upload" style="cursor: pointer; color: #646cff;">here</label>.
       </p>
       <input type="file" id="file-upload" style="display: none;" bind:files accept=".json" />
