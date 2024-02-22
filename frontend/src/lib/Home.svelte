@@ -8,9 +8,9 @@
     if (!file) return;
     file.arrayBuffer().then((data) => {
       try {
-        let string_data = String.fromCharCode.apply(null, new Uint8Array(data));
-        let profile: DataWithDiagnostics = JSON.parse(string_data);
-        data_map.set("local_file", profile);
+        let string_data = new TextDecoder().decode(data);
+        let profile: Profile = JSON.parse(string_data);
+        data_map.set("local_file", { data: profile });
         window.location.href = "#local_file";
       } catch (e) {
         notify(`Couldn't open ${file.name}: ${e}`);
