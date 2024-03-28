@@ -9,8 +9,8 @@
     file.arrayBuffer().then((data) => {
       try {
         let string_data = new TextDecoder().decode(data);
-        let profile: Profile = JSON.parse(string_data);
-        data_map.set("local_file", { data: profile });
+        let profile: Profile | DataWithDiagnostics = JSON.parse(string_data);
+        data_map.set("local_file", 'data' in profile ? profile : { data: profile });
         window.location.href = "#local_file";
       } catch (e) {
         notify(`Couldn't open ${file.name}: ${e}`);
