@@ -37,7 +37,7 @@ export async function load({ params, fetch }) {
   let data: DataWithDiagnostics;
   if (!params.id) {
     const local = get(localData);
-    if (!local) throw error(404, 'No data');
+    if (!local) error(404, 'No data');
     data = local;
   } else {
     const res = await fetch(`/v1/get/${params.id}`);

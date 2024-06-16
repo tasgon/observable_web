@@ -18,7 +18,7 @@
   $: user = 'unknown';
   $: if (info.user) {
     fetch(`https://api.ashcon.app/mojang/v2/user/${info.user}`)
-      .then((res) => res.json())
+      .then((res) => res.json() as Promise<{ username: string }>)
       .then((res) => (user = res.username));
   }
   $: duration = info?.duration ? Math.floor(info.duration / 1000.0).toString() : null;
