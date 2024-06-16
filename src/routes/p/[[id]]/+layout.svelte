@@ -1,11 +1,14 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import type { LayoutData } from './$types';
-  import { Clock, Hourglass, User } from 'lucide-svelte';
+  import Clock from 'lucide-svelte/icons/clock';
+  import Download from 'lucide-svelte/icons/download';
+  import Hourglass from 'lucide-svelte/icons/hourglass';
+  import User from 'lucide-svelte/icons/user';
 
   export let data: LayoutData;
 
-  $: basePath = `/p/${$page.params.id}`;
+  $: basePath = $page.params.id ? `/p/${$page.params.id}` : '/p';
   $: tabs = [
     { name: 'Individual', path: `${basePath}` },
     { name: 'Chunks', path: `${basePath}/chunks` },
@@ -52,6 +55,18 @@
         {duration}s
       {/if}
     </div>
+
+    {#if $page.params.id}
+      <div class="flex-row ml-auto mr-2 hidden sm:flex">
+        <a
+          href="/v1/get/{$page.params.id}"
+          download="{$page.params.id}.json"
+          class="p-2 mx-1 rounded-md bg-neutral-700 transition ease-in-out duration-100 hover:bg-neutral-800"
+        >
+          <Download />
+      </a>
+      </div>
+    {/if}
   </nav>
 
   <div class="mx-2 pt-1">

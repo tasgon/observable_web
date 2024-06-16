@@ -1,5 +1,14 @@
-export async function POST({ request }) {
-  const body = request.body;
+import { sqids } from '$lib';
+import { db } from '$lib/db.js';
+import { text } from '@sveltejs/kit';
 
-  return new Response('');
+export async function POST({ request }) {
+  const data = await request.arrayBuffer();
+  console.log(data);
+  const { rows: [row] } = await db.execute({
+    sql: 'INSERT INTO profiles (contents) VALUES (?) RETURNING id',
+    args: [data]
+  });
+  const hash = sqids.encode([row.id as number]);
+  return text(`https://observable.tas.sh/p/${hash}`);
 }

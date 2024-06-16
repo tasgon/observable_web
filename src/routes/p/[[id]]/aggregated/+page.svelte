@@ -29,7 +29,7 @@
   {#each aggregates as [name, { rate, ticks, count }]}
     <tr>
       <td class="pl-1"><span class="font-semibold">{name}</span> x{count}</td>
-      <td>{Math.round(rate / 1000)} us/t ({ticks} ticks)</td>
+      <td>{Math.round(rate / 1000)} μs/t ({ticks} ticks)</td>
     </tr>
   {/each}
 </table>

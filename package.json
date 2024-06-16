@@ -41,6 +41,7 @@
   "type": "module",
   "dependencies": {
     "@libsql/client": "^0.6.2",
-    "lucide-svelte": "^0.395.0"
+    "lucide-svelte": "^0.395.0",
+    "sqids": "^0.3.0"
   }
 }

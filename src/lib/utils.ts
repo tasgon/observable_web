@@ -12,3 +12,10 @@ export function copyTPCommand(dimension: string, entry: number | Position) {
   window.navigator.clipboard.writeText(cmd);
   notification.set(`Copied <code>${cmd}</code> to clipboard`);
 }
+
+export function download(filename: string, data: string) {
+  let a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([data], { type: 'text/plain' }));
+  a.download = filename;
+  a.click();
+}

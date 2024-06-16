@@ -34,21 +34,22 @@
         <span>{enabled ? '-' : '+'} {dim}</span>
         <span>&mdash; {entries.length} entries</span>
       </td>
-      <td>{Math.round(rate / 1000)} us/t</td>
+      <td>{Math.round(rate / 1000)} μs/t</td>
       <td>Position</td>
     </tr>
     <tbody hidden={!enabled}>
       <tr
         class="cursor-pointer text-blue-400"
         on:click={(_) => (offset -= WINDOW_SIZE)}
-        hidden={offset == 0}>
+        hidden={offset == 0}
+      >
         <span class="pl-4 select-none">&minus;</span>
       </tr>
       {#each slice as entry}
         {@const { x, y, z } = entry.position}
         <tr class="border-b border-b-neutral-600">
           <td class="pl-4">{entry.type}</td>
-          <td>{Math.round(entry.rate / 1000)} us/t</td>
+          <td>{Math.round(entry.rate / 1000)} μs/t</td>
           <td class="w-[30%]">
             <div class="min-w-[30%] inline-block">
               ({x}, {y}, {z})

@@ -5,33 +5,32 @@
 
   export let data: PageData;
 
-  $: chunkMap = data.entries
-    .map(({ name, entries, rate }) => {
-      let chunkList: Map<
-        string,
-        {
-          chunk: { x: number; z: number };
-          rate: number;
-        }
-      > = new Map()
-      for (let entry of entries) {
-        let { x, z } = entry.position;
-        let chunk = { x: Math.trunc(x / 16), z: Math.trunc(z / 16) };
-        let key = `x${chunk.x}z${chunk.z}`;
-        let listEntry = chunkList.get(key) ?? {
-          chunk,
-          rate: 0
-        };
-        listEntry.rate += entry.rate;
-        chunkList.set(key, listEntry);
+  $: chunkMap = data.entries.map(({ name, entries, rate }) => {
+    let chunkList: Map<
+      string,
+      {
+        chunk: { x: number; z: number };
+        rate: number;
       }
-      let chunks = Array.from(chunkList)
-        .sort(([_, a], [_2, b]) => b.rate - a.rate)
-        .map(([_, entry]) => {
-          return entry;
-        });
-      return { name, chunks, rate, enabled: true };
-    });
+    > = new Map();
+    for (let entry of entries) {
+      let { x, z } = entry.position;
+      let chunk = { x: Math.trunc(x / 16), z: Math.trunc(z / 16) };
+      let key = `x${chunk.x}z${chunk.z}`;
+      let listEntry = chunkList.get(key) ?? {
+        chunk,
+        rate: 0
+      };
+      listEntry.rate += entry.rate;
+      chunkList.set(key, listEntry);
+    }
+    let chunks = Array.from(chunkList)
+      .sort(([_, a], [_2, b]) => b.rate - a.rate)
+      .map(([_, entry]) => {
+        return entry;
+      });
+    return { name, chunks, rate, enabled: true };
+  });
 </script>
 
 <table class="border-b w-full">
@@ -42,7 +41,7 @@
         style="width: 50%; font-weight: bold; cursor: pointer;"
         >{enabled ? '-' : '+'} {name} &mdash; {chunks.length} chunks</td
       >
-      <td>{Math.round(rate / 1000)} us/t</td>
+      <td>{Math.round(rate / 1000)} μs/t</td>
       <td>Position</td>
     </tr>
     {#if enabled}
@@ -55,7 +54,7 @@
         }}
         <tr style="font-size: 1em; border-bottom: 1px solid #404040;">
           <td style="padding-left: 2em;">({x}, {z})</td>
-          <td>{Math.round(entry.rate / 1000)} us/t</td>
+          <td>{Math.round(entry.rate / 1000)} μs/t</td>
           <td style="width: 30%;">
             <button
               style="cursor: pointer; color: lightblue; display: inline-block;"
