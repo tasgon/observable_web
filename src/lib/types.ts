@@ -31,5 +31,5 @@ export interface Diagnostics {
 
 export interface DataWithDiagnostics {
   data: Profile;
-  diagnostics: Diagnostics;
+  diagnostics?: Diagnostics;
 }
