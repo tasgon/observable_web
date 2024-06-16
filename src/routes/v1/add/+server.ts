@@ -1,5 +1,4 @@
-import { sqids } from '$lib';
-import { db } from '$lib/db.js';
+import { sqids, db } from '$lib';
 import { text } from '@sveltejs/kit';
 
 export async function POST({ request }) {
