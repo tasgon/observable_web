@@ -8,5 +8,5 @@ export async function POST({ request }) {
     args: [data]
   });
   const hash = sqids.encode([row.id as number]);
-  return text(`https://observable.tas.sh/p/${hash}`);
+  return text(`https://${request.headers.get('host')}/p/${hash}`);
 }
