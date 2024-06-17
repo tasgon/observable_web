@@ -8,18 +8,17 @@ export async function GET({ params }) {
     args: [id]
   });
 
-  debugger;
-
   if (rows.length > 0) {
     return new Response(rows[0].contents as ArrayBuffer, {
       headers: {
         'Content-Type': 'application/json',
         'Content-Encoding': 'gzip'
-      }
+      },
+      encodeBody: "manual"
     });
   }
 
-  const req = await fetch(`https://observable.tas.sh/v1/get/${params.id}`);
+  const req = await fetch(`https://observable-old.tas.sh/v1/get/${params.id}`);
   const data = await req.json();
   return json(data);
 }
