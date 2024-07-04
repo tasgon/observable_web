@@ -2,6 +2,7 @@ export interface Profile {
   entities: Record<string, Entry[]>;
   blocks: Record<string, Entry[]>;
   ticks: number;
+  traces?: Trace;
 }
 
 export interface Position {
@@ -16,7 +17,14 @@ export interface Entry {
   type: string;
   rate: number;
   ticks: number;
-  traces?: any;
+  traces?: Trace;
+}
+
+export interface Trace {
+  className: string;
+  methodName: string;
+  count: number;
+  children: Trace[];
 }
 
 export interface Diagnostics {

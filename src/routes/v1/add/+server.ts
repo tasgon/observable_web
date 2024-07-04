@@ -3,7 +3,9 @@ import { text } from '@sveltejs/kit';
 
 export async function POST({ request }) {
   const data = await request.arrayBuffer();
-  const { rows: [row] } = await db.execute({
+  const {
+    rows: [row]
+  } = await db.execute({
     sql: 'INSERT INTO profiles (contents) VALUES (?) RETURNING id',
     args: [data]
   });

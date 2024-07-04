@@ -14,7 +14,7 @@ export async function GET({ params }) {
         'Content-Type': 'application/json',
         'Content-Encoding': 'gzip'
       },
-      encodeBody: "manual"
+      encodeBody: 'manual'
     });
   }
 
