@@ -13,8 +13,8 @@
     { name: 'Individual', path: `${basePath}` },
     { name: 'Chunks', path: `${basePath}/chunks` },
     { name: 'Aggregate', path: `${basePath}/aggregated` },
-    { name: 'Info', path: `${basePath}/info` },
-    { name: 'Traces', path: `${basePath}/traces`, hidden: !data.profile.traces }
+    { name: 'Traces', path: `${basePath}/traces`, hidden: !data.profile.traces },
+    { name: 'Info', path: `${basePath}/info` }
   ];
 
   $: info = data.diagnostics;
