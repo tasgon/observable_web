@@ -12,13 +12,17 @@
       <svelte:component this={expanded ? Minus : Plus} size={16} />
     </span>
     <code class="pl-2">{data.className}:{data.methodName}</code>
-    <span class="ml-auto">{(100.0 * data.count / (total ?? data.count)).toFixed(2)}%</span>
+    <span class="ml-auto">{((100.0 * data.count) / (total ?? data.count)).toFixed(2)}%</span>
   </button>
   {#if expanded}
-      <div class="pl-4 ml-[7px]" class:border-l-2={data.children.length > 1}>
-        {#each data.children as trace}
-          <svelte:self data={trace} total={total ?? data.count} expanded={data.children.length === 1} />
-        {/each}
-      </div>
+    <div class="pl-4 ml-[7px]" class:border-l-2={data.children.length > 1}>
+      {#each data.children as trace}
+        <svelte:self
+          data={trace}
+          total={total ?? data.count}
+          expanded={data.children.length === 1}
+        />
+      {/each}
+    </div>
   {/if}
 </div>

@@ -9,7 +9,7 @@
       ...(Object.values(profile.blocks).flat() as Entry[]),
       ...(Object.values(profile.entities).flat() as Entry[])
     ];
-    let aggregateMap: Map<string, { duration: number; count: number; }> = new Map();
+    let aggregateMap: Map<string, { duration: number; count: number }> = new Map();
     for (const e of entries) {
       let val = aggregateMap.get(e.type) ?? { duration: 0, count: 0 };
       val.duration += e.rate * e.ticks;
@@ -33,7 +33,7 @@
   {#each aggregates as [name, { duration, count }]}
     <tr>
       <td><span class="font-semibold">{name}</span> x{count}</td>
-      <td>{Math.round(duration / 1000)} μs ({(100 * duration / total).toFixed(1)}%)</td>
+      <td>{Math.round(duration / 1000)} μs ({((100 * duration) / total).toFixed(1)}%)</td>
     </tr>
   {/each}
 </table>

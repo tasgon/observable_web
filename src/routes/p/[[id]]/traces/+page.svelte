@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { LayoutData } from "../$types";
-  import Trace from "./Trace.svelte";
+  import type { LayoutData } from '../$types';
+  import Trace from './Trace.svelte';
 
   export let data: LayoutData;
 
