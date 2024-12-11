@@ -34,8 +34,7 @@
   <div class="max-w-xl pt-1 gap-3 [&>*]:my-2">
     <h1>What is this?</h1>
     <p>
-      Observable profiles (tile) entities and shows you what's taking up tick time and where. It's available for Minecraft 1.16 - 1.20
-      (with early builds for 1.21 available <a href="https://github.com/tasgon/observable/actions?query=branch%3A1.21">here</a>)
+      Observable profiles (tile) entities and shows you what's taking up tick time and where. It's available for Minecraft 1.16 - 1.21
       on (Neo)Forge and Fabric. Get it on
       <a href="https://www.curseforge.com/minecraft/mc-mods/observable">CurseForge</a>,
       <a href="https://modrinth.com/mod/observable">Modrinth</a>, or
