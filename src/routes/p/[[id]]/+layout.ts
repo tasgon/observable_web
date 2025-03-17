@@ -38,11 +38,17 @@ export async function load({ params, fetch }) {
   if (!params.id) {
     const local = get(localData);
     if (!local) error(404, 'No data');
-    data = local;
+    if ('data' in local) {
+      data = local;
+    } else {
+      // localData just contains profile
+      data = { data: local as Profile };
+    }
   } else {
     const res = await fetch(`/v1/get/${params.id}`);
     data = await res.json();
   }
+  console.log(data);
   let { data: profile, diagnostics } = data;
   return {
     profile,
