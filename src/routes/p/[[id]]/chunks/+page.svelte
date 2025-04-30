@@ -15,7 +15,7 @@
     > = new Map();
     for (let entry of entries) {
       let { x, z } = entry.position;
-      let chunk = { x: Math.trunc(x / 16), z: Math.trunc(z / 16) };
+      let chunk = { x: Math.floor(x / 16), z: Math.floor(z / 16) };
       let key = `x${chunk.x}z${chunk.z}`;
       let listEntry = chunkList.get(key) ?? {
         chunk,
@@ -48,9 +48,9 @@
       {#each chunks as entry}
         {@const { x, z } = entry.chunk}
         {@const position = {
-          x: x * 16,
+          x: x * 16 + 8,
           y: 128,
-          z: z * 16
+          z: z * 16 + 8
         }}
         <tr style="font-size: 1em; border-bottom: 1px solid #404040;">
           <td style="padding-left: 2em;">({x}, {z})</td>
